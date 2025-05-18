@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Edit Post</title>
+</head>
+<body>
+    <h2>Edit Post</h2>
+    
+    <form method="POST">
+        <div>
+            <label for="title">Title:</label><br />
+            <input type="text" id="title" name="title" value="{{ post.title }}" required />
+        </div>
+
+        <div>
+            <label for="content">Content:</label><br />
+            <textarea id="content" name="content" rows="8" cols="50" required>{{ post.content }}</textarea>
+        </div>
+
+        <div>
+            <label for="max_comments_per_user">Max Comments Per User:</label><br />
+            <input
+                type="number"
+                id="max_comments_per_user"
+                name="max_comments_per_user"
+                min="1"
+                value="{{ post.max_comments_per_user or 3 }}"
+                required
+            />
+        </div>
+
+        <button type="submit">Update Post</button>
+    </form>
+
+    <p><a href="{{ url_for('admin_dashboard') }}">Back to Admin Dashboard</a></p>
+</body>
+</html>

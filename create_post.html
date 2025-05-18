@@ -1,0 +1,27 @@
+<!-- templates/create_post.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Post</title>
+</head>
+<body>
+    <h2>Create New Post</h2>
+    <form method="POST">
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br><br>
+
+        <label>Content:</label><br>
+        <textarea name="content" rows="5" cols="40" required></textarea><br><br>
+
+        <label for="max_comments_per_user">Max comments per user:</label>
+        <input type="number" name="max_comments_per_user" id="max_comments_per_user" min="1" value="{{ post.max_comments_per_user if post else 3 }}">
+
+
+        <button type="submit">Create Post</button>
+    </form>
+
+    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>
