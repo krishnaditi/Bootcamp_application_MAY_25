@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect, flash, url_for, request, session
 from models import db, User, Post, Comment
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import func
+
 
 app = Flask(__name__)
 
@@ -221,6 +223,29 @@ def add_comment(post_id):
 
     flash("Comment added successfully.", "success")
     return redirect(url_for('view_post', post_id=post_id))
+
+
+@app.route('/summary')
+def summary():
+    if 'admin_id' not in session:
+        flash('Unauthorized access', 'danger')
+        return redirect(url_for('admin_login'))
+
+    total_users = User.query.count()
+    total_posts = Post.query.count()
+    total_comments = Comment.query.count()
+
+    # Get top 5 users by number of comments
+    
+    active_users = db.session.query(
+        User.full_name, func.count(Comment.id).label('comment_count')
+    ).join(Comment).group_by(User.id).order_by(func.count(Comment.id).desc()).limit(5).all()
+
+    return render_template('summary.html',
+                           total_users=total_users,
+                           total_posts=total_posts,
+                           total_comments=total_comments,
+                           active_users=active_users)
 
 
 if __name__ == '__main__':
